@@ -1,13 +1,11 @@
 (function () {
   "use strict";
 
-  /* Footer year */
   var yearEl = document.getElementById("year");
   if (yearEl) {
     yearEl.textContent = String(new Date().getFullYear());
   }
 
-  /* Mobile navigation */
   var nav = document.querySelector(".site-nav");
   var toggle = document.querySelector(".nav-toggle");
 
@@ -19,7 +17,8 @@
   }
 
   if (toggle && nav) {
-    toggle.addEventListener("click", function () {
+    toggle.addEventListener("click", function (e) {
+      e.stopPropagation();
       var open = !nav.classList.contains("is-open");
       setNavOpen(open);
     });
@@ -33,35 +32,63 @@
     document.addEventListener("keydown", function (e) {
       if (e.key === "Escape") setNavOpen(false);
     });
+
+    document.addEventListener(
+      "click",
+      function (e) {
+        if (!document.body.classList.contains("nav-open")) return;
+        if (nav.contains(e.target) || toggle.contains(e.target)) return;
+        setNavOpen(false);
+      },
+      true
+    );
   }
 
-  /* Typewriter effect (index only) */
-  var tw = document.getElementById("typewriter");
-  if (tw && tw.dataset.text) {
-    var full = tw.dataset.text;
-    var i = 0;
-    tw.textContent = "";
-
-    var cursor = document.querySelector(".cursor-blink");
-
-    function tick() {
-      if (i < full.length) {
-        tw.textContent += full.charAt(i);
-        i += 1;
-        var delay = full.charAt(i - 1) === "." ? 280 : 28 + Math.random() * 32;
-        window.setTimeout(tick, delay);
-      } else if (cursor) {
-        cursor.style.visibility = "hidden";
-      }
+  function pathKey(url) {
+    var p = url.pathname;
+    if (!p || p === "/") return "/";
+    var lower = p.toLowerCase();
+    if (lower === "/index.html" || lower.endsWith("/index.html")) {
+      var base = p.slice(0, -10);
+      return !base || base === "/" ? "/" : base.replace(/\/$/, "") || "/";
     }
-
-    window.setTimeout(tick, 400);
+    return p.replace(/\/$/, "") || "/";
   }
 
-  /* Page transition: exit animation before navigation */
+  function sameDocumentUrl(dest, here) {
+    if (dest.origin !== here.origin) return false;
+    return pathKey(dest) === pathKey(here) && dest.search === here.search;
+  }
+
+  /* Fade-in on scroll */
   var prefersReduced =
     window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  if (!prefersReduced && "IntersectionObserver" in window) {
+    var revealEls = document.querySelectorAll(".reveal");
+    if (revealEls.length) {
+      var io = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              io.unobserve(entry.target);
+            }
+          });
+        },
+        { root: null, rootMargin: "0px 0px -5% 0px", threshold: 0.05 }
+      );
+      revealEls.forEach(function (el) {
+        io.observe(el);
+      });
+    }
+  } else {
+    document.querySelectorAll(".reveal").forEach(function (el) {
+      el.classList.add("is-visible");
+    });
+  }
+
+  /* Page transition before internal navigation */
   if (!prefersReduced) {
     document.querySelectorAll('a[href$=".html"]').forEach(function (anchor) {
       anchor.addEventListener("click", function (e) {
@@ -80,7 +107,7 @@
         }
 
         if (dest.origin !== here.origin) return;
-        if (dest.pathname === here.pathname && dest.search === here.search) return;
+        if (sameDocumentUrl(dest, here)) return;
 
         e.preventDefault();
         document.body.classList.remove("page-enter");
@@ -88,7 +115,7 @@
 
         window.setTimeout(function () {
           window.location.href = href;
-        }, 320);
+        }, 300);
       });
     });
   }
