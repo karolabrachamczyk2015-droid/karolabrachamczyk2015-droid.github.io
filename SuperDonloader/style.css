@@ -1,68 +1,119 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial;
+}
+
 body {
     background: #050505;
     color: white;
-    font-family: Arial;
-    text-align: center;
 }
 
-.container {
-    margin-top: 100px;
+/* tło glow */
+.bg {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 30% 30%, #7b2ff7, transparent),
+                radial-gradient(circle at 70% 70%, #f107a3, transparent);
+    filter: blur(120px);
+    z-index: -1;
 }
 
-/* neon */
-.glow {
-    color: #a020f0;
-    text-shadow: 0 0 10px #a020f0, 0 0 20px #c040ff;
-    animation: pulse 2s infinite;
+/* app center */
+.app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 120px;
+}
+
+h1 {
+    font-size: 32px;
+    background: linear-gradient(90deg, #a020f0, #ff00cc);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.subtitle {
+    color: #aaa;
+    margin-bottom: 30px;
+}
+
+/* glass card */
+.card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(20px);
+    padding: 30px;
+    border-radius: 20px;
+    width: 320px;
+    box-shadow: 0 0 40px rgba(160,32,240,0.3);
 }
 
 /* input */
-input, select {
+input {
+    width: 100%;
     padding: 12px;
-    width: 280px;
-    border-radius: 10px;
+    border-radius: 12px;
     border: none;
-    margin-top: 15px;
+    margin-bottom: 15px;
+    background: rgba(255,255,255,0.1);
+    color: white;
+}
+
+/* row */
+.row {
+    display: flex;
+    gap: 10px;
+}
+
+/* select */
+select {
+    flex: 1;
+    padding: 12px;
+    border-radius: 12px;
+    border: none;
+    background: rgba(255,255,255,0.1);
+    color: white;
 }
 
 /* button */
 button {
-    margin-top: 15px;
-    padding: 12px 25px;
-    background: #a020f0;
+    flex: 1;
+    padding: 12px;
+    border-radius: 12px;
     border: none;
-    border-radius: 10px;
+    background: linear-gradient(90deg, #a020f0, #ff00cc);
     color: white;
     cursor: pointer;
-    box-shadow: 0 0 15px #a020f0;
     transition: 0.3s;
 }
 
 button:hover {
-    transform: scale(1.1);
-    background: #c040ff;
+    transform: scale(1.05);
+    box-shadow: 0 0 20px #a020f0;
 }
 
-/* progress bar */
-.progress-container {
-    width: 300px;
-    height: 10px;
-    background: #222;
+/* progress */
+.progress-box {
+    margin-top: 20px;
+    height: 8px;
+    background: rgba(255,255,255,0.1);
     border-radius: 10px;
-    margin: 20px auto;
     overflow: hidden;
 }
 
 #progress {
     height: 100%;
     width: 0%;
-    background: #a020f0;
-    box-shadow: 0 0 10px #a020f0;
+    background: linear-gradient(90deg, #a020f0, #ff00cc);
 }
 
-/* animacje */
-@keyframes pulse {
-    0% { text-shadow: 0 0 10px #a020f0; }
-    50% { text-shadow: 0 0 25px #c040ff; }
-    100% { text-shadow: 0 0 10px #a020f0; }
-  }
+/* status */
+#status {
+    margin-top: 15px;
+    text-align: center;
+    color: #ccc;
+}
