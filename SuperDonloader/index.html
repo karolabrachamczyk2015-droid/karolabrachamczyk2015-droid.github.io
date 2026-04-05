@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>SuperDownloader</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1 class="glow">⚡ SuperDownloader</h1>
+    <p>Pobieraj pliki szybko i stylowo</p>
+
+    <input type="text" id="url" placeholder="Wklej link...">
+
+    <select id="format">
+        <option value="auto">Auto</option>
+        <option value="mp4">MP4 🎥</option>
+        <option value="mp3">MP3 🎵</option>
+    </select>
+
+    <button onclick="startDownload()">Pobierz</button>
+
+    <div class="progress-container">
+        <div id="progress"></div>
+    </div>
+
+    <p id="status"></p>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
